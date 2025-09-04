@@ -1,9 +1,10 @@
-# CAP Theorem Visual Diagrams
+# CAP Theorem Complete Visual Guide with Detailed Flows
 
-## 1. CAP Triangle Visualization
+## 1. CAP Triangle with Detailed Definitions
 
 ```
                     Consistency (C)
+                    "All nodes see same data"
                          ↑
                          |
                          |
@@ -11,6 +12,8 @@
     (RDBMS)              |              (MongoDB)
     (MySQL)              |              (HBase)
     (PostgreSQL)         |              (Redis)
+    "Strong C + High A"  |              "Strong C + Partition T"
+    "No Partition T"     |              "Sacrifice A during partitions"
                          |
                          |
                          ↓
@@ -18,7 +21,10 @@
                    (Cassandra)
                    (DynamoDB)
                    (CouchDB)
+              "High A + Partition T"
+              "Sacrifice C during partitions"
               Availability (A) ←→ Partition Tolerance (P)
+              "Always responds"   "Survives network splits"
 ```
 
 ## 2. Database Classification Matrix
@@ -33,62 +39,140 @@
 | **Redis** | CP | ✅ Strong | ❌ Limited | ✅ Yes | Caching, Sessions |
 | **CouchDB** | AP | ❌ Eventual | ✅ High | ✅ Yes | Content Management |
 
-## 3. Network Partition Scenarios
+## 3. Detailed Network Partition Flow Scenarios
 
-### Scenario A: Normal Operation
+### Scenario A: Normal Operation Flow
 ```
+Time: T0
 [Node A] ←→ [Node B] ←→ [Node C]
    ↓           ↓           ↓
- Data: 100   Data: 100   Data: 100
-```
-
-### Scenario B: Network Partition
-```
-[Node A]   [Node B] ←→ [Node C]
-   ↓           ↓           ↓
 Data: 100   Data: 100   Data: 100
-(Isolated)  (Connected) (Connected)
+
+Client Request: "Update value to 200"
+↓
+Node A: Receives request
+Node A → Node B: "Update to 200"
+Node A → Node C: "Update to 200"
+Node B → Node A: "Updated"
+Node C → Node A: "Updated"
+Node A → Client: "Success"
+
+Time: T1
+[Node A] ←→ [Node B] ←→ [Node C]
+   ↓           ↓           ↓
+Data: 200   Data: 200   Data: 200
 ```
 
-### CP System Response:
+### Scenario B: Network Partition Detection
 ```
+Time: T0 - Normal
+[Node A] ←→ [Node B] ←→ [Node C]
+   ↓           ↓           ↓
+Data: 200   Data: 200   Data: 200
+
+Time: T1 - Partition Occurs
 [Node A]   [Node B] ←→ [Node C]
    ↓           ↓           ↓
-Unavailable  Available   Available
+Data: 200   Data: 200   Data: 200
+(Isolated)  (Connected) (Connected)
+
+Detection:
+Node A: "Cannot reach B or C - Partition detected"
+Node B: "Cannot reach A - Partition detected"
+Node C: "Cannot reach A - Partition detected"
+```
+
+### CP System Response Flow:
+```
+Time: T2 - CP System Response
+[Node A]   [Node B] ←→ [Node C]
+   ↓           ↓           ↓
+UNAVAILABLE  Available   Available
+(Consistent) (Consistent) (Consistent)
+
+Client 1 → Node A: "Update to 300"
+Node A: "Service unavailable - cannot ensure consistency"
+
+Client 2 → Node B: "Update to 300"
+Node B: Processes update
+Node B → Node C: "Update to 300"
+Node B → Client 2: "Success"
+
+Time: T3 - Final State
+[Node A]   [Node B] ←→ [Node C]
+   ↓           ↓           ↓
+UNAVAILABLE  Data: 300   Data: 300
 (Consistent) (Consistent) (Consistent)
 ```
 
-### AP System Response:
+### AP System Response Flow:
 ```
+Time: T2 - AP System Response
 [Node A]   [Node B] ←→ [Node C]
    ↓           ↓           ↓
 Available   Available   Available
 (Stale)     (Current)   (Current)
+
+Client 1 → Node A: "Update to 300"
+Node A: Processes update locally
+Node A → Client 1: "Success"
+Node A: Data = 300 (but isolated)
+
+Client 2 → Node B: "Update to 400"
+Node B: Processes update
+Node B → Node C: "Update to 400"
+Node B → Client 2: "Success"
+
+Time: T3 - Inconsistent State
+[Node A]   [Node B] ←→ [Node C]
+   ↓           ↓           ↓
+Data: 300   Data: 400   Data: 400
+(Isolated)  (Current)   (Current)
 ```
 
-## 4. Decision Flow Diagram
+## 4. Complete Decision Flow with Detailed Questions
 
 ```
 Start: Choose Database for Your System
          ↓
-    Is strong consistency critical?
+    ┌─────────────────────────────────────┐
+    │ What is your primary requirement?   │
+    └─────────────────────────────────────┘
+         ↓
+    ┌─────────────────────────────────────┐
+    │ Is strong consistency critical?     │
+    │ (Financial data, user accounts,     │
+    │  inventory, transactions)           │
+    └─────────────────────────────────────┘
          ↓
     ┌─────┴─────┐
     │    Yes    │    No
     ↓           ↓
-Is partition   Is high availability
-tolerance      critical?
-needed?        ↓
-    ↓      ┌─────┴─────┐
-    │      │    Yes    │    No
-    ↓      ↓           ↓
-   Yes    Choose AP    Consider
-    ↓    (Cassandra,   Hybrid
-    │    DynamoDB)     Approach
-    ↓
-Choose CP
-(MongoDB,
-HBase)
+┌─────────────────┐  ┌─────────────────────────────────────┐
+│ Is partition    │  │ Is high availability critical?      │
+│ tolerance       │  │ (Social media, content delivery,    │
+│ needed?         │  │  real-time systems, gaming)         │
+│ (Multi-region,  │  └─────────────────────────────────────┘
+│  distributed)   │         ↓
+└─────────────────┘    ┌─────┴─────┐
+         ↓              │    Yes    │    No
+    ┌─────┴─────┐        ↓           ↓
+    │    Yes    │    No  Choose AP   Consider
+    ↓           ↓       (Cassandra,  Hybrid
+   Choose CP    Choose CA DynamoDB,   Approach
+  (MongoDB,     (PostgreSQL, CouchDB)
+   HBase,       MySQL,
+   Redis)       Oracle)
+         ↓           ↓
+    ┌─────────────────────────────────────┐
+    │ Additional Considerations:          │
+    │ • Data volume and growth rate       │
+    │ • Query patterns (read vs write)    │
+    │ • Geographic distribution           │
+    │ • Team expertise                    │
+    │ • Operational complexity            │
+    │ • Cost considerations               │
+    └─────────────────────────────────────┘
 ```
 
 ## 5. Real-World Architecture Examples
