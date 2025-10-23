@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Optimization Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            padding: 60px;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #DD0031;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #87CEEB;
+        }
+
+        .slide h3 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #34A853;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .slide ul {
+            text-align: left;
+            max-width: 80%;
+        }
+
+        .slide li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2rem;
+            text-align: left;
+            margin: 1rem 0;
+            border-left: 4px solid #DD0031;
+            max-width: 90%;
+            overflow-x: auto;
+        }
+
+        .metrics-table {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .metrics-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.3rem;
+        }
+
+        .metrics-table th,
+        .metrics-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metrics-table th {
+            background: rgba(221, 0, 49, 0.3);
+            font-weight: bold;
+        }
+
+        .improvement {
+            color: #34A853;
+            font-weight: bold;
+        }
+
+        .countdown {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #FF6B6B;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .stats-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-box h4 {
+            font-size: 1.8rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-box p {
+            font-size: 1.2rem;
+            color: #ffffff;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem 0;
+        }
+
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 3px solid;
+        }
+
+        .timeline-item.fcp { border-color: #34A853; }
+        .timeline-item.lcp { border-color: #4285F4; }
+        .timeline-item.tti { border-color: #FBBC04; }
+        .timeline-item.cls { border-color: #EA4335; }
+
+        .timeline-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #87CEEB;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #34A853 0%, #87CEEB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .callout {
+            background: linear-gradient(135deg, #DD0031, #FF6B6B);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(221, 0, 49, 0.3);
+        }
+
+        .callout h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .roadmap-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #34A853;
+        }
+
+        .roadmap-item h4 {
+            color: #34A853;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-item ul {
+            text-align: left;
+        }
+
+        .roadmap-item li {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">14</span>
+    </div>
+
+    <!-- Slide 1: Title Slide -->
+    <div class="slide active">
+        <h1>The Zen of Angular Optimization</h1>
+        <h2>A Lighthouse-Guided Journey</h2>
+        <p style="font-size: 1.8rem; margin-top: 2rem; color: #87CEEB;">From 4.5MB bundles to blazing-fast load times</p>
+        <div style="margin-top: 3rem;">
+            <div class="stats-box">
+                <h4>Performance Score</h4>
+                <p>45 → 78 (+73%)</p>
+            </div>
+            <div class="stats-box">
+                <h4>Bundle Size</h4>
+                <p>4.47 MB → 2.1 MB (-53%)</p>
+            </div>
+            <div class="stats-box">
+                <h4>Load Time</h4>
+                <p>8.2s → 3.1s (-62%)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Problem -->
+    <div class="slide">
+        <h1>3 Seconds. That's All You Have.</h1>
+        <div class="countdown">3</div>
+        <div style="margin-top: 2rem;">
+            <div class="stats-box">
+                <h4>53%</h4>
+                <p>of users abandon if load > 3 seconds</p>
+            </div>
+            <div class="stats-box">
+                <h4>4.47 MB</h4>
+                <p>initial bundle size</p>
+            </div>
+            <div class="stats-box">
+                <h4>45/100</h4>
+                <p>Lighthouse Performance Score</p>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 1.3rem; color: #FF6B6B;">
+            Performance isn't just about speed—it's about accessibility, inclusivity, and respect for your users' time.
+        </p>
+    </div>
+
+    <!-- Slide 3: Lighthouse Metrics -->
+    <div class="slide">
+        <h2>What Lighthouse Really Measures</h2>
+        <div class="timeline">
+            <div class="timeline-item fcp">
+                <h4>FCP</h4>
+                <p>1.2s</p>
+                <small>First Contentful Paint</small>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-item lcp">
+                <h4>LCP</h4>
+                <p>2.3s</p>
+                <small>Largest Contentful Paint</small>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-item tti">
+                <h4>TTI</h4>
+                <p>3.1s</p>
+                <small>Time to Interactive</small>
+            </div>
+            <div class="arrow">→</div>
+            <div class="timeline-item cls">
+                <h4>CLS</h4>
+                <p>0.05</p>
+                <small>Cumulative Layout Shift</small>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 1.3rem;">
+            Each metric tells a story about how your users perceive your application
+        </p>
+    </div>
+
+    <!-- Slide 4: Optimization Approach -->
+    <div class="slide">
+        <h2>Measure → Analyze → Optimize</h2>
+        <div style="display: flex; justify-content: space-around; margin: 3rem 0; width: 100%; max-width: 800px;">
+            <div class="stats-box" style="width: 200px;">
+                <h4>1. Measure</h4>
+                <p>Lighthouse CI baseline</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stats-box" style="width: 200px;">
+                <h4>2. Analyze</h4>
+                <p>Bundle analysis & bottleneck identification</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stats-box" style="width: 200px;">
+                <h4>3. Optimize</h4>
+                <p>Targeted interventions</p>
+            </div>
+        </div>
+        <p style="font-size: 1.3rem; color: #87CEEB;">
+            No optimization without measurement
+        </p>
+    </div>
+
+    <!-- Slide 5: Lazy Loading -->
+    <div class="slide">
+        <h2>Lazy Loading: Load Only What You Need</h2>
+        <div style="display: flex; gap: 2rem; width: 100%; max-width: 1000px;">
+            <div style="flex: 1;">
+                <h3 style="color: #FF6B6B;">Before</h3>
+                <div class="code-block">
+import { CommitteeFormBuilderComponent } from './committee-form-builder';
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <h3 style="color: #34A853;">After</h3>
+                <div class="code-block">
+{
+  path: 'CommitteeFormBuilder/:id',
+  loadChildren: () => import('./features/committee-builder.module')
+    .then(m => m.CommitteeBuilderModule)
+}
+                </div>
+            </div>
+        </div>
+        <div class="callout">
+            <h3>Impact</h3>
+            <p>Initial bundle reduced by ~792KB • TTI improved by ~2-3 seconds</p>
+        </div>
+    </div>
+
+    <!-- Slide 6: OnPush Change Detection -->
+    <div class="slide">
+        <h2>OnPush: Smarter Change Detection</h2>
+        <div style="margin: 2rem 0;">
+            <h3 style="color: #FF6B6B;">The Problem</h3>
+            <p>Every HTTP request triggers change detection across the entire component tree</p>
+        </div>
+        <div class="code-block">
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+        </div>
+        <div class="callout">
+            <h3>Impact</h3>
+            <p>40-60% reduction in change detection cycles • TTI improvement: ~1-2 seconds</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: Font Loading Strategy -->
+    <div class="slide">
+        <h2>Async Font Loading: Don't Block the Critical Path</h2>
+        <div style="margin: 2rem 0;">
+            <h3 style="color: #FF6B6B;">Current Problem</h3>
+            <div class="code-block">
+&lt;!-- These block rendering! --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"&gt;
+            </div>
+        </div>
+        <div style="margin: 2rem 0;">
+            <h3 style="color: #34A853;">Optimized Approach</h3>
+            <div class="code-block">
+&lt;!-- Preconnect to speed up DNS/TCP/TLS --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+
+&lt;!-- Async load with font-display: swap --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet" media="print" onload="this.media='all'"&gt;
+            </div>
+        </div>
+        <div class="callout">
+            <h3>Impact</h3>
+            <p>FCP improvement of 400-800ms</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Material Modules -->
+    <div class="slide">
+        <h2>Refactor SharedModule: Import Only What You Use</h2>
+        <div style="margin: 2rem 0;">
+            <h3 style="color: #FF6B6B;">The Problem</h3>
+            <p>SharedModule imports and exports 25+ Material modules</p>
+        </div>
+        <div class="code-block">
+// shared.module.ts - Importing EVERYTHING
+imports: [
+  MatDialogModule, MatProgressSpinnerModule, MatIconModule,
+  MatCardModule, MatDatepickerModule, MatFormFieldModule,
+  // ... 20 more modules
+]
+        </div>
+        <div class="callout">
+            <h3>Impact</h3>
+            <p>~200-300KB reduction in vendor bundle • Better tree-shaking</p>
+        </div>
+    </div>
+
+    <!-- Slide 9: Live Demo -->
+    <div class="slide">
+        <h2>Watch the Magic Happen</h2>
+        <div style="display: flex; gap: 2rem; width: 100%; max-width: 1000px; margin: 2rem 0;">
+            <div style="flex: 1; background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 12px;">
+                <h3 style="color: #FF6B6B;">Before</h3>
+                <div class="stats-box">
+                    <h4>TTI</h4>
+                    <p>8.2s</p>
+                </div>
+                <div class="stats-box">
+                    <h4>Performance</h4>
+                    <p>45/100</p>
+                </div>
+            </div>
+            <div style="flex: 1; background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 12px;">
+                <h3 style="color: #34A853;">After</h3>
+                <div class="stats-box">
+                    <h4>TTI</h4>
+                    <p>3.1s</p>
+                </div>
+                <div class="stats-box">
+                    <h4>Performance</h4>
+                    <p>78/100</p>
+                </div>
+            </div>
+        </div>
+        <p style="font-size: 1.3rem; color: #87CEEB;">
+            Real-time optimization demonstration
+        </p>
+    </div>
+
+    <!-- Slide 10: Results -->
+    <div class="slide">
+        <h2>The Numbers Don't Lie</h2>
+        <div class="metrics-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Improvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Performance Score</td>
+                        <td>45</td>
+                        <td>78</td>
+                        <td class="improvement">+73%</td>
+                    </tr>
+                    <tr>
+                        <td>FCP</td>
+                        <td>2.8s</td>
+                        <td>1.2s</td>
+                        <td class="improvement">-57%</td>
+                    </tr>
+                    <tr>
+                        <td>LCP</td>
+                        <td>6.4s</td>
+                        <td>2.3s</td>
+                        <td class="improvement">-64%</td>
+                    </tr>
+                    <tr>
+                        <td>TTI</td>
+                        <td>8.2s</td>
+                        <td>3.1s</td>
+                        <td class="improvement">-62%</td>
+                    </tr>
+                    <tr>
+                        <td>Bundle Size</td>
+                        <td>4.47 MB</td>
+                        <td>2.1 MB</td>
+                        <td class="improvement">-53%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size: 1.3rem; color: #34A853; margin-top: 2rem;">
+            These aren't theoretical—these are real improvements from targeted optimizations
+        </p>
+    </div>
+
+    <!-- Slide 11: Roadmap -->
+    <div class="slide">
+        <h2>The Journey Continues</h2>
+        <div class="roadmap-grid">
+            <div class="roadmap-item">
+                <h4>High Impact / Low Effort</h4>
+                <ul>
+                    <li>Image lazy loading with loading="lazy"</li>
+                    <li>Remove unused polyfills</li>
+                    <li>Enable Brotli compression</li>
+                </ul>
+            </div>
+            <div class="roadmap-item">
+                <h4>High Impact / High Effort</h4>
+                <ul>
+                    <li>Migrate to standalone components</li>
+                    <li>Implement virtual scrolling</li>
+                    <li>Progressive Web App features</li>
+                </ul>
+            </div>
+        </div>
+        <p style="font-size: 1.3rem; color: #87CEEB; margin-top: 2rem;">
+            Strategic approach to continuous optimization
+        </p>
+    </div>
+
+    <!-- Slide 12: Call to Action -->
+    <div class="slide">
+        <h2>Performance is a Feature, Not a Nice-to-Have</h2>
+        <div class="callout">
+            <h3>Actionable Takeaways</h3>
+            <ul style="text-align: left; font-size: 1.5rem;">
+                <li>Add Lighthouse CI to your pipeline today</li>
+                <li>Set budget limits in angular.json</li>
+                <li>Make one optimization per sprint</li>
+            </ul>
+        </div>
+        <p style="font-size: 2rem; color: #34A853; margin-top: 2rem; font-weight: bold;">
+            Remember: Every millisecond is a vote of confidence in your users.
+        </p>
+    </div>
+
+    <!-- Slide 13: Q&A -->
+    <div class="slide">
+        <h2>Questions & Discussion</h2>
+        <div style="margin: 3rem 0;">
+            <h3 style="color: #87CEEB;">Key Resources</h3>
+            <ul style="text-align: left; font-size: 1.5rem; max-width: 600px;">
+                <li>Angular Performance Guide</li>
+                <li>Lighthouse Documentation</li>
+                <li>Web.dev Performance</li>
+                <li>Core Web Vitals</li>
+            </ul>
+        </div>
+        <div class="stats-box">
+            <h4>Contact</h4>
+            <p>Let's discuss your optimization challenges</p>
+        </div>
+    </div>
+
+    <!-- Slide 14: Thank You -->
+    <div class="slide">
+        <h1>Thank You for Your Time</h1>
+        <p style="font-size: 2rem; color: #87CEEB; margin: 2rem 0;">
+            Let's make the web faster, one optimization at a time.
+        </p>
+        <div style="margin-top: 3rem;">
+            <div class="stats-box">
+                <h4>Performance Score</h4>
+                <p>45 → 78 (+73%)</p>
+            </div>
+            <div class="stats-box">
+                <h4>Bundle Size</h4>
+                <p>4.47 MB → 2.1 MB (-53%)</p>
+            </div>
+            <div class="stats-box">
+                <h4>Load Time</h4>
+                <p>8.2s → 3.1s (-62%)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Touch/swipe support
+        let startX = 0;
+        let startY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
+
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+
+            let diffX = startX - endX;
+            let diffY = startY - endY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+
+            startX = 0;
+            startY = 0;
+        });
+    </script>
+</body>
+</html>
