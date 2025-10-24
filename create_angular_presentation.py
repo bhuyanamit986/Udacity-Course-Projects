@@ -22,15 +22,48 @@ def create_angular_presentation():
     prs.slide_width = Inches(13.33)
     prs.slide_height = Inches(7.5)
     
-    # Define color scheme
+    # Define color scheme based on template instructions
     colors = {
-        'dark_bg': RGBColor(20, 20, 20),      # Dark background
-        'accent_orange': RGBColor(255, 102, 0),  # Angular orange
-        'accent_cyan': RGBColor(0, 204, 204),    # Lighthouse cyan
-        'success_green': RGBColor(52, 168, 83),  # Performance green
+        # Template-specified colors
+        'title_bg_start': RGBColor(26, 26, 46),    # #1a1a2e
+        'title_bg_end': RGBColor(22, 33, 62),      # #16213e
+        'content_bg': RGBColor(255, 255, 255),     # White background for content slides
+        'angular_red': RGBColor(221, 0, 49),       # #DD0031 Angular Red
+        'lighthouse_blue': RGBColor(66, 133, 244), # #4285F4 Lighthouse Blue
+        'performance_green': RGBColor(52, 168, 83), # #34A853 Performance Green
+        'light_blue': RGBColor(135, 206, 235),     # #87CEEB Light Blue
+        'dark_blue': RGBColor(26, 26, 46),         # #1a1a2e Dark Blue
+        'dark_gray': RGBColor(51, 51, 51),         # #333333 Dark Gray
         'white': RGBColor(255, 255, 255),
         'light_gray': RGBColor(200, 200, 200),
-        'dark_gray': RGBColor(100, 100, 100)
+        
+        # Slide-specific gradient colors
+        'red_gradient_start': RGBColor(255, 107, 107),  # #FF6B6B
+        'red_gradient_end': RGBColor(255, 142, 142),    # #FF8E8E
+        'blue_gradient_start': RGBColor(66, 133, 244),  # #4285F4
+        'blue_gradient_end': RGBColor(135, 206, 235),   # #87CEEB
+        'green_gradient_start': RGBColor(52, 168, 83),  # #34A853
+        'green_gradient_end': RGBColor(144, 238, 144),  # #90EE90
+        'orange_gradient_start': RGBColor(251, 188, 4), # #FBBC04
+        'orange_gradient_end': RGBColor(255, 215, 0),   # #FFD700
+        'purple_gradient_start': RGBColor(156, 39, 176), # #9C27B0
+        'purple_gradient_end': RGBColor(225, 190, 231),  # #E1BEE7
+        'teal_gradient_start': RGBColor(0, 150, 136),    # #009688
+        'teal_gradient_end': RGBColor(128, 203, 196),    # #80CBC4
+        'indigo_gradient_start': RGBColor(63, 81, 181),  # #3F51B5
+        'indigo_gradient_end': RGBColor(159, 168, 218),  # #9FA8DA
+        'dark_gradient_start': RGBColor(44, 62, 80),     # #2C3E50
+        'dark_gradient_end': RGBColor(52, 73, 94),       # #34495E
+        'success_gradient_start': RGBColor(39, 174, 96), # #27AE60
+        'success_gradient_end': RGBColor(88, 214, 141),  # #58D68D
+        'future_gradient_start': RGBColor(142, 68, 173), # #8E44AD
+        'future_gradient_end': RGBColor(187, 143, 206),  # #BB8FCE
+        'action_gradient_start': RGBColor(231, 76, 60),  # #E74C3C
+        'action_gradient_end': RGBColor(241, 148, 138),  # #F1948A
+        'discussion_gradient_start': RGBColor(52, 152, 219), # #3498DB
+        'discussion_gradient_end': RGBColor(133, 193, 233), # #85C1E9
+        'gratitude_gradient_start': RGBColor(243, 156, 18), # #F39C12
+        'gratitude_gradient_end': RGBColor(247, 220, 111)  # #F7DC6F
     }
     
     # Slide 1: Title Slide
@@ -78,36 +111,60 @@ def create_angular_presentation():
     return prs
 
 def create_title_slide(prs, colors):
-    """Create the title slide with cinematic design"""
+    """Create the title slide with template-specified design"""
     slide_layout = prs.slide_layouts[6]  # Blank layout
     slide = prs.slides.add_slide(slide_layout)
     
-    # Set background to dark gradient
+    # Set background to gradient from #1a1a2e to #16213e
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['title_bg_start']
     
-    # Main title
+    # Main title - Roboto Bold, 48px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(2), Inches(11.33), Inches(1.5))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
-    title_p.text = "The Zen of Angular Optimization"
+    title_p.text = "The Zen of Angular Optimization: A Lighthouse-Guided Journey"
     title_p.font.size = Pt(48)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
-    # Subtitle
+    # Subtitle - Roboto Regular, 24px, Light Blue (#87CEEB)
     subtitle_box = slide.shapes.add_textbox(Inches(1), Inches(3.8), Inches(11.33), Inches(0.8))
     subtitle_frame = subtitle_box.text_frame
     subtitle_frame.clear()
     subtitle_p = subtitle_frame.paragraphs[0]
-    subtitle_p.text = "A Lighthouse-Guided Journey from 4.5MB to Blazing Speed"
+    subtitle_p.text = "From 4.5MB bundles to blazing-fast load times"
     subtitle_p.font.size = Pt(24)
-    subtitle_p.font.color.rgb = colors['accent_orange']
+    subtitle_p.font.name = 'Roboto'
+    subtitle_p.font.color.rgb = colors['light_blue']
     subtitle_p.alignment = PP_ALIGN.CENTER
+    
+    # Add Angular and Lighthouse logo placeholders (top left and top right)
+    # Angular logo placeholder (top left)
+    angular_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(2), Inches(0.8))
+    angular_frame = angular_box.text_frame
+    angular_frame.clear()
+    angular_p = angular_frame.paragraphs[0]
+    angular_p.text = "Angular"
+    angular_p.font.size = Pt(20)
+    angular_p.font.bold = True
+    angular_p.font.color.rgb = colors['angular_red']
+    
+    # Lighthouse logo placeholder (top right)
+    lighthouse_box = slide.shapes.add_textbox(Inches(10.83), Inches(0.5), Inches(2), Inches(0.8))
+    lighthouse_frame = lighthouse_box.text_frame
+    lighthouse_frame.clear()
+    lighthouse_p = lighthouse_frame.paragraphs[0]
+    lighthouse_p.text = "Lighthouse"
+    lighthouse_p.font.size = Pt(20)
+    lighthouse_p.font.bold = True
+    lighthouse_p.font.color.rgb = colors['lighthouse_blue']
+    lighthouse_p.alignment = PP_ALIGN.RIGHT
     
     # Performance indicator
     perf_box = slide.shapes.add_textbox(Inches(4), Inches(5.2), Inches(5.33), Inches(0.8))
@@ -116,7 +173,7 @@ def create_title_slide(prs, colors):
     perf_p = perf_frame.paragraphs[0]
     perf_p.text = "Performance Score: 45 → 78"
     perf_p.font.size = Pt(20)
-    perf_p.font.color.rgb = colors['success_green']
+    perf_p.font.color.rgb = colors['performance_green']
     perf_p.alignment = PP_ALIGN.CENTER
     
     # Add speaker notes
@@ -125,15 +182,15 @@ def create_title_slide(prs, colors):
     notes_text_frame.text = "Hook: Start with '3 seconds. That's all you have.' Make eye contact, pause for dramatic effect. Frame this as an opportunity, not a problem."
 
 def create_hook_slide(prs, colors):
-    """Create the 3-second rule hook slide"""
+    """Create the 3-second rule hook slide with red gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Red gradient background (#FF6B6B to #FF8E8E)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['red_gradient_start']
     
     # Large countdown
     countdown_box = slide.shapes.add_textbox(Inches(2), Inches(1.5), Inches(9.33), Inches(2))
@@ -143,7 +200,8 @@ def create_hook_slide(prs, colors):
     countdown_p.text = "3"
     countdown_p.font.size = Pt(120)
     countdown_p.font.bold = True
-    countdown_p.font.color.rgb = colors['accent_orange']
+    countdown_p.font.name = 'Roboto'
+    countdown_p.font.color.rgb = colors['white']
     countdown_p.alignment = PP_ALIGN.CENTER
     
     # Subtitle
@@ -153,6 +211,7 @@ def create_hook_slide(prs, colors):
     subtitle_p = subtitle_frame.paragraphs[0]
     subtitle_p.text = "That's All You Have"
     subtitle_p.font.size = Pt(36)
+    subtitle_p.font.name = 'Roboto'
     subtitle_p.font.color.rgb = colors['white']
     subtitle_p.alignment = PP_ALIGN.CENTER
     
@@ -171,6 +230,7 @@ def create_hook_slide(prs, colors):
         p = stats_frame.paragraphs[i] if i < len(stats_frame.paragraphs) else stats_frame.add_paragraph()
         p.text = stat
         p.font.size = Pt(20)
+        p.font.name = 'Roboto'
         p.font.color.rgb = colors['light_gray']
         p.alignment = PP_ALIGN.CENTER
     
@@ -180,17 +240,17 @@ def create_hook_slide(prs, colors):
     notes_text_frame.text = "Don't shame the current state. Frame as 'opportunity for improvement'. Use hand gestures to emphasize the 3-second countdown."
 
 def create_lighthouse_metrics_slide(prs, colors):
-    """Create the Lighthouse metrics explanation slide"""
+    """Create the Lighthouse metrics explanation slide with blue gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Blue gradient background (#4285F4 to #87CEEB)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['blue_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -198,14 +258,15 @@ def create_lighthouse_metrics_slide(prs, colors):
     title_p.text = "What Lighthouse Really Measures"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
     # Metrics explanation
     metrics = [
-        ("FCP", "First Contentful Paint", "When users see something", colors['success_green']),
-        ("LCP", "Largest Contentful Paint", "When they see what matters", colors['accent_cyan']),
-        ("TTI", "Time to Interactive", "When they can do something", colors['accent_orange']),
+        ("FCP", "First Contentful Paint", "When users see something", colors['performance_green']),
+        ("LCP", "Largest Contentful Paint", "When they see what matters", colors['lighthouse_blue']),
+        ("TTI", "Time to Interactive", "When they can do something", colors['orange_gradient_start']),
         ("CLS", "Cumulative Layout Shift", "Whether the page is stable", RGBColor(255, 100, 100))
     ]
     
@@ -247,17 +308,17 @@ def create_lighthouse_metrics_slide(prs, colors):
     notes_text_frame.text = "Use hand gestures to show timeline progression. Emphasize that Lighthouse measures user experience, not just speed."
 
 def create_approach_slide(prs, colors):
-    """Create the optimization approach slide"""
+    """Create the optimization approach slide with green gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Green gradient background (#34A853 to #90EE90)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['green_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -265,14 +326,15 @@ def create_approach_slide(prs, colors):
     title_p.text = "Measure → Analyze → Optimize"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
     # Process steps
     steps = [
-        ("1", "Measure", "Lighthouse CI baseline", colors['accent_cyan']),
-        ("2", "Analyze", "Bundle analysis & bottleneck identification", colors['accent_orange']),
-        ("3", "Optimize", "Targeted interventions", colors['success_green'])
+        ("1", "Measure", "Lighthouse CI baseline", colors['lighthouse_blue']),
+        ("2", "Analyze", "Bundle analysis & bottleneck identification", colors['orange_gradient_start']),
+        ("3", "Optimize", "Targeted interventions", colors['performance_green'])
     ]
     
     for i, (num, title, desc, color) in enumerate(steps):
@@ -316,24 +378,25 @@ def create_approach_slide(prs, colors):
     notes_text_frame.text = "'No optimization without measurement.' 'We use Lighthouse CI to make performance a first-class citizen.'"
 
 def create_lazy_loading_slide(prs, colors):
-    """Create the lazy loading deep dive slide"""
+    """Create the lazy loading deep dive slide with orange gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Orange gradient background (#FBBC04 to #FFD700)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['orange_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
     title_p.text = "Lazy Loading: Load Only What You Need"
-    title_p.font.size = Pt(32)
+    title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -353,7 +416,7 @@ def create_lazy_loading_slide(prs, colors):
     after_p = after_frame.paragraphs[0]
     after_p.text = "After: Route-level Lazy Loading\n\n{\n  path: 'CommitteeFormBuilder/:id',\n  loadChildren: () => import('./features/committee-builder.module')\n    .then(m => m.CommitteeBuilderModule)\n}"
     after_p.font.size = Pt(14)
-    after_p.font.color.rgb = colors['success_green']
+    after_p.font.color.rgb = colors['performance_green']
     after_p.font.name = 'Courier New'
     
     # Impact
@@ -364,7 +427,7 @@ def create_lazy_loading_slide(prs, colors):
     impact_p.text = "Impact: Initial bundle reduced by ~792KB • TTI improved by ~2-3 seconds"
     impact_p.font.size = Pt(20)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['accent_orange']
+    impact_p.font.color.rgb = colors['orange_gradient_start']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -373,24 +436,25 @@ def create_lazy_loading_slide(prs, colors):
     notes_text_frame.text = "'We've already started this journey—now we finish it.' Show the dramatic bundle size reduction."
 
 def create_onpush_slide(prs, colors):
-    """Create the OnPush change detection slide"""
+    """Create the OnPush change detection slide with purple gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Purple gradient background (#9C27B0 to #E1BEE7)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['purple_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
     title_p.text = "OnPush: Smarter Change Detection"
-    title_p.font.size = Pt(32)
+    title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -411,7 +475,7 @@ def create_onpush_slide(prs, colors):
     code_p = code_frame.paragraphs[0]
     code_p.text = "@Component({\n  selector: 'app-dashboard',\n  templateUrl: './dashboard.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush\n})"
     code_p.font.size = Pt(14)
-    code_p.font.color.rgb = colors['accent_cyan']
+    code_p.font.color.rgb = colors['lighthouse_blue']
     code_p.font.name = 'Courier New'
     code_p.alignment = PP_ALIGN.CENTER
     
@@ -423,7 +487,7 @@ def create_onpush_slide(prs, colors):
     impact_p.text = "Impact: 40-60% reduction in change detection cycles • TTI improvement: ~1-2 seconds"
     impact_p.font.size = Pt(18)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['success_green']
+    impact_p.font.color.rgb = colors['performance_green']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -432,24 +496,25 @@ def create_onpush_slide(prs, colors):
     notes_text_frame.text = "'Not every component needs this—start with leaf components.' Show the dramatic reduction in CPU usage."
 
 def create_font_loading_slide(prs, colors):
-    """Create the font loading strategy slide"""
+    """Create the font loading strategy slide with teal gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Teal gradient background (#009688 to #80CBC4)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['teal_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
     title_p.text = "Async Font Loading: Don't Block the Critical Path"
-    title_p.font.size = Pt(28)
+    title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -481,7 +546,7 @@ def create_font_loading_slide(prs, colors):
     solution_p = solution_frame.paragraphs[0]
     solution_p.text = "Optimized Approach: Preconnect + Async Load"
     solution_p.font.size = Pt(18)
-    solution_p.font.color.rgb = colors['success_green']
+    solution_p.font.color.rgb = colors['performance_green']
     solution_p.alignment = PP_ALIGN.CENTER
     
     # Solution code
@@ -503,7 +568,7 @@ def create_font_loading_slide(prs, colors):
     impact_p.text = "Impact: FCP improvement of 400-800ms • Better perceived performance"
     impact_p.font.size = Pt(16)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['accent_orange']
+    impact_p.font.color.rgb = colors['orange_gradient_start']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -512,24 +577,25 @@ def create_font_loading_slide(prs, colors):
     notes_text_frame.text = "Show the dramatic difference between blocking and non-blocking font loading. Emphasize the FCP improvement."
 
 def create_material_modules_slide(prs, colors):
-    """Create the tree-shakeable Material modules slide"""
+    """Create the tree-shakeable Material modules slide with indigo gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Indigo gradient background (#3F51B5 to #9FA8DA)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['indigo_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
     title_p.text = "Refactor SharedModule: Import Only What You Use"
-    title_p.font.size = Pt(28)
+    title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -561,7 +627,7 @@ def create_material_modules_slide(prs, colors):
     solution_p = solution_frame.paragraphs[0]
     solution_p.text = "Optimized Approach: Feature-specific imports only"
     solution_p.font.size = Pt(18)
-    solution_p.font.color.rgb = colors['success_green']
+    solution_p.font.color.rgb = colors['performance_green']
     solution_p.alignment = PP_ALIGN.CENTER
     
     # Impact
@@ -572,7 +638,7 @@ def create_material_modules_slide(prs, colors):
     impact_p.text = "Impact: ~200-300KB reduction in vendor bundle • Better tree-shaking"
     impact_p.font.size = Pt(16)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['accent_orange']
+    impact_p.font.color.rgb = colors['orange_gradient_start']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -581,17 +647,17 @@ def create_material_modules_slide(prs, colors):
     notes_text_frame.text = "Show the dramatic difference in bundle size. Emphasize that this is about importing only what you actually use."
 
 def create_demo_slide(prs, colors):
-    """Create the live demo slide"""
+    """Create the live demo slide with dark gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Dark gradient background (#2C3E50 to #34495E)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['dark_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -599,6 +665,7 @@ def create_demo_slide(prs, colors):
     title_p.text = "Watch the Magic Happen"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -629,7 +696,7 @@ def create_demo_slide(prs, colors):
     perf_p.text = "TTI: 8.2s → 5.7s"
     perf_p.font.size = Pt(24)
     perf_p.font.bold = True
-    perf_p.font.color.rgb = colors['success_green']
+    perf_p.font.color.rgb = colors['performance_green']
     perf_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -638,17 +705,17 @@ def create_demo_slide(prs, colors):
     notes_text_frame.text = "Have a backup video in case of technical difficulties. Show the dramatic improvement in real-time."
 
 def create_results_slide(prs, colors):
-    """Create the before/after results slide"""
+    """Create the before/after results slide with success gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Success gradient background (#27AE60 to #58D68D)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['success_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -656,6 +723,7 @@ def create_results_slide(prs, colors):
     title_p.text = "The Numbers Don't Lie"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -678,7 +746,7 @@ def create_results_slide(prs, colors):
         header_p.text = header
         header_p.font.size = Pt(16)
         header_p.font.bold = True
-        header_p.font.color.rgb = colors['accent_orange']
+        header_p.font.color.rgb = colors['orange_gradient_start']
         header_p.alignment = PP_ALIGN.CENTER
     
     # Table rows
@@ -712,7 +780,7 @@ def create_results_slide(prs, colors):
         after_p = after_frame.paragraphs[0]
         after_p.text = after
         after_p.font.size = Pt(14)
-        after_p.font.color.rgb = colors['success_green']
+        after_p.font.color.rgb = colors['performance_green']
         after_p.alignment = PP_ALIGN.CENTER
         
         # Improvement
@@ -732,17 +800,17 @@ def create_results_slide(prs, colors):
     notes_text_frame.text = "'These aren't theoretical—these are real improvements.' Emphasize the dramatic improvements."
 
 def create_roadmap_slide(prs, colors):
-    """Create the future roadmap slide"""
+    """Create the future roadmap slide with future gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Future gradient background (#8E44AD to #BB8FCE)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['future_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -750,6 +818,7 @@ def create_roadmap_slide(prs, colors):
     title_p.text = "The Journey Continues"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -761,7 +830,7 @@ def create_roadmap_slide(prs, colors):
     high_low_p.text = "High Impact / Low Effort (Do First)"
     high_low_p.font.size = Pt(18)
     high_low_p.font.bold = True
-    high_low_p.font.color.rgb = colors['success_green']
+    high_low_p.font.color.rgb = colors['performance_green']
     
     high_low_items = [
         "• Image lazy loading with loading='lazy'",
@@ -803,24 +872,25 @@ def create_roadmap_slide(prs, colors):
     notes_text_frame.text = "Show the strategic approach to optimization. Emphasize that this is just the beginning."
 
 def create_cta_slide(prs, colors):
-    """Create the call to action slide"""
+    """Create the call to action slide with action gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Action gradient background (#E74C3C to #F1948A)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['action_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
     title_p = title_frame.paragraphs[0]
     title_p.text = "Performance is a Feature, Not a Nice-to-Have"
-    title_p.font.size = Pt(32)
+    title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -859,17 +929,17 @@ def create_cta_slide(prs, colors):
     notes_text_frame.text = "End with energy and conviction. Make it clear this is achievable. Encourage immediate action."
 
 def create_qa_slide(prs, colors):
-    """Create the Q&A slide"""
+    """Create the Q&A slide with discussion gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Discussion gradient background (#3498DB to #85C1E9)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['discussion_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(11.33), Inches(1))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -877,6 +947,7 @@ def create_qa_slide(prs, colors):
     title_p.text = "Questions & Discussion"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
@@ -911,17 +982,17 @@ def create_qa_slide(prs, colors):
     notes_text_frame.text = "Be prepared for technical questions. Have backup slides with more details. Encourage discussion and feedback."
 
 def create_thank_you_slide(prs, colors):
-    """Create the thank you slide"""
+    """Create the thank you slide with gratitude gradient background"""
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     
-    # Dark background
+    # Gratitude gradient background (#F39C12 to #F7DC6F)
     background = slide.background
     fill = background.fill
     fill.solid()
-    fill.fore_color.rgb = colors['dark_bg']
+    fill.fore_color.rgb = colors['gratitude_gradient_start']
     
-    # Title
+    # Title - Roboto Bold, 36px, White
     title_box = slide.shapes.add_textbox(Inches(1), Inches(2), Inches(11.33), Inches(1.5))
     title_frame = title_box.text_frame
     title_frame.clear()
@@ -929,6 +1000,7 @@ def create_thank_you_slide(prs, colors):
     title_p.text = "Thank You for Your Time"
     title_p.font.size = Pt(36)
     title_p.font.bold = True
+    title_p.font.name = 'Roboto'
     title_p.font.color.rgb = colors['white']
     title_p.alignment = PP_ALIGN.CENTER
     
