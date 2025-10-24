@@ -556,7 +556,7 @@ def create_font_loading_slide(prs, colors):
     solution_code_p = solution_code_frame.paragraphs[0]
     solution_code_p.text = '<!-- Preconnect to speed up DNS/TCP/TLS -->\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n\n<!-- Async load with font-display: swap -->\n<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"\n      rel="stylesheet" media="print" onload="this.media=\'all\'">'
     solution_code_p.font.size = Pt(10)
-    solution_code_p.font.color.rgb = colors['accent_cyan']
+    solution_code_p.font.color.rgb = colors['lighthouse_blue']
     solution_code_p.font.name = 'Courier New'
     solution_code_p.alignment = PP_ALIGN.CENTER
     
@@ -791,7 +791,7 @@ def create_results_slide(prs, colors):
         improvement_p.text = improvement
         improvement_p.font.size = Pt(14)
         improvement_p.font.bold = True
-        improvement_p.font.color.rgb = colors['accent_cyan']
+        improvement_p.font.color.rgb = colors['lighthouse_blue']
         improvement_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -852,7 +852,7 @@ def create_roadmap_slide(prs, colors):
     high_high_p.text = "High Impact / High Effort (Plan Carefully)"
     high_high_p.font.size = Pt(18)
     high_high_p.font.bold = True
-    high_high_p.font.color.rgb = colors['accent_orange']
+    high_high_p.font.color.rgb = colors['orange_gradient_start']
     
     high_high_items = [
         "• Migrate to standalone components (Angular 18+)",
@@ -920,7 +920,7 @@ def create_cta_slide(prs, colors):
     closing_p.text = "Remember: Every millisecond is a vote of confidence in your users."
     closing_p.font.size = Pt(24)
     closing_p.font.bold = True
-    closing_p.font.color.rgb = colors['accent_orange']
+    closing_p.font.color.rgb = colors['orange_gradient_start']
     closing_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -959,7 +959,7 @@ def create_qa_slide(prs, colors):
     resources_p.text = "Key Resources:"
     resources_p.font.size = Pt(20)
     resources_p.font.bold = True
-    resources_p.font.color.rgb = colors['accent_cyan']
+    resources_p.font.color.rgb = colors['lighthouse_blue']
     resources_p.alignment = PP_ALIGN.CENTER
     
     resources = [
@@ -1011,7 +1011,7 @@ def create_thank_you_slide(prs, colors):
     message_p = message_frame.paragraphs[0]
     message_p.text = "Let's make the web faster, one optimization at a time."
     message_p.font.size = Pt(24)
-    message_p.font.color.rgb = colors['accent_orange']
+    message_p.font.color.rgb = colors['orange_gradient_start']
     message_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
