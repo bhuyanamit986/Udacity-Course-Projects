@@ -546,7 +546,7 @@ def create_font_loading_slide(prs, colors):
     solution_p = solution_frame.paragraphs[0]
     solution_p.text = "Optimized Approach: Preconnect + Async Load"
     solution_p.font.size = Pt(18)
-    solution_p.font.color.rgb = colors['success_green']
+    solution_p.font.color.rgb = colors['performance_green']
     solution_p.alignment = PP_ALIGN.CENTER
     
     # Solution code
@@ -568,7 +568,7 @@ def create_font_loading_slide(prs, colors):
     impact_p.text = "Impact: FCP improvement of 400-800ms • Better perceived performance"
     impact_p.font.size = Pt(16)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['accent_orange']
+    impact_p.font.color.rgb = colors['orange_gradient_start']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -627,7 +627,7 @@ def create_material_modules_slide(prs, colors):
     solution_p = solution_frame.paragraphs[0]
     solution_p.text = "Optimized Approach: Feature-specific imports only"
     solution_p.font.size = Pt(18)
-    solution_p.font.color.rgb = colors['success_green']
+    solution_p.font.color.rgb = colors['performance_green']
     solution_p.alignment = PP_ALIGN.CENTER
     
     # Impact
@@ -638,7 +638,7 @@ def create_material_modules_slide(prs, colors):
     impact_p.text = "Impact: ~200-300KB reduction in vendor bundle • Better tree-shaking"
     impact_p.font.size = Pt(16)
     impact_p.font.bold = True
-    impact_p.font.color.rgb = colors['accent_orange']
+    impact_p.font.color.rgb = colors['orange_gradient_start']
     impact_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -696,7 +696,7 @@ def create_demo_slide(prs, colors):
     perf_p.text = "TTI: 8.2s → 5.7s"
     perf_p.font.size = Pt(24)
     perf_p.font.bold = True
-    perf_p.font.color.rgb = colors['success_green']
+    perf_p.font.color.rgb = colors['performance_green']
     perf_p.alignment = PP_ALIGN.CENTER
     
     # Speaker notes
@@ -746,7 +746,7 @@ def create_results_slide(prs, colors):
         header_p.text = header
         header_p.font.size = Pt(16)
         header_p.font.bold = True
-        header_p.font.color.rgb = colors['accent_orange']
+        header_p.font.color.rgb = colors['orange_gradient_start']
         header_p.alignment = PP_ALIGN.CENTER
     
     # Table rows
@@ -830,7 +830,7 @@ def create_roadmap_slide(prs, colors):
     high_low_p.text = "High Impact / Low Effort (Do First)"
     high_low_p.font.size = Pt(18)
     high_low_p.font.bold = True
-    high_low_p.font.color.rgb = colors['success_green']
+    high_low_p.font.color.rgb = colors['performance_green']
     
     high_low_items = [
         "• Image lazy loading with loading='lazy'",
